@@ -20,7 +20,7 @@ st.text("the dataframe() function is used to display the loaded dataframe!")
 st.multiselect("This is a multiselect function creating a pick list",["need","pass in a","list","pre-entered"], ["pre-entered","list"])
 
 filtered = st.multiselect("Pick fruit",list(df_fruit.index))
-df_filtered = df_fruit.loc[df_filtered]
+df_filtered = df_fruit.loc[filtered]
 
 st.dataframe(df_filtered)
 
