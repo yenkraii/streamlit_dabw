@@ -11,7 +11,7 @@ df_fruit = pd.read_csv("https://uni-lab-files.s3.us-west-2.amazonaws.com/dabw/fr
 
 df_fruit = df_fruit.set_index("Fruit")
 
-st.dataframe(df_fruit)
+st.dataframe(df_fruit.head())
 
 st.text("the dataframe() function is used to display the loaded dataframe!")
 
@@ -21,4 +21,7 @@ st.multiselect("This is a multiselect function creating a pick list",["need","pa
 
 st.multiselect("Pick fruit",list(df_fruit.index))
 
+st.dataframe(df_fruit)
+
+st.text("order matters in interaction")
 
