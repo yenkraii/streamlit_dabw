@@ -19,9 +19,11 @@ st.text("the dataframe() function is used to display the loaded dataframe!")
 
 st.multiselect("This is a multiselect function creating a pick list",["need","pass in a","list","pre-entered"], ["pre-entered","list"])
 
-st.multiselect("Pick fruit",list(df_fruit.index))
+filtered = st.multiselect("Pick fruit",list(df_fruit.index))
+df_filtered = df_fruit.loc[df_filtered]
 
-st.dataframe(df_fruit)
+st.dataframe(df_filtered)
 
-st.text("order matters in interaction")
+st.text("need to save selection as a variable to be used to loc[] out the relevant rows")
+st.text("then display the filtered dataframe instead")
 
