@@ -17,7 +17,7 @@ st.text("the dataframe() function is used to display the loaded dataframe!")
 
 # we create user interaction
 
-st.multiselect("This is a multiselect function creating a pick list",["need","pass in a","list"])
+st.multiselect("This is a multiselect function creating a pick list",["need","pass in a","list","pre-entered"], ["pre-entered","list"])
 
 st.multiselect("Pick fruit",list(df_fruit.index))
 
