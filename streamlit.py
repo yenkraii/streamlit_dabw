@@ -49,9 +49,12 @@ st.dataframe(fruityvice_normalized)
 import snowflake.connector
 conn = snowflake.connector.connect(**st.secrets["snowflake"])
 cur = conn.cursor()
-cur.execute("SELECT * from pc_rivery_db.public.fruit_load_list")
+cur.execute("SELECT * from pc_rivery_db.public.fruit_load_list;")
 dr = cur.fetchall()
 
 st.header("The fruit load list contains:")
 st.dataframe(dr)
 
+# allow insertion of data 
+inp = st.text_input("What fruit would you like to add?","jackfruit")
+cur.execute("insert into PC_RIVERY_DB.PUBLIC.FRUIT_LOAD_LIST values({0});".format(inp))
