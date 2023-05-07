@@ -47,7 +47,7 @@ st.dataframe(fruityvice_normalized)
 
 # connect to streamlit n retrieve the info imbued in the file
 import snowflake.connector
-conn = snowflake.connector.connect(**streamlit.secrets["snowflake"])
+conn = snowflake.connector.connect(**st.secrets["snowflake"])
 cur = conn.cursor()
 cur.execute("SELECT CURRENT_USER(), CURRENT_ACCOUNT(), CURRENT_REGION()")
 dr = cur.fetchone()
