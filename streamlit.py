@@ -32,8 +32,16 @@ st.text("then display the filtered dataframe instead")
 
 #New section to utilise fruityvice api response
 
-# streamlit.text(fruityvice_response.json())
-# to retreive the json response
+# create a function
+def get_fv_data(frch):
+  fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + fruit_choice)
+  # standardise returned response to look prettier
+  fruityvice_normalized = pd.json_normalize(fruityvice_response.json())
+  # streamlit.text(fruityvice_response.json())
+  # to retreive the json response
+  return fruityvice_normalized
+  
+  
 st.header("Fruityvice Fruit Advice!")
 
 try:
@@ -41,26 +49,38 @@ try:
   if not fruit_choice:
     st.error("Please select a fruit to get info")
   else:
-    fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + fruit_choice)
-    # standardise returned response to look prettier
-    fruityvice_normalized = pd.json_normalize(fruityvice_response.json())
+    fvdt = get_fv_data(fruit_choice)
     # presenting it in a dataframe
-    st.dataframe(fruityvice_normalized)
+    st.dataframe(fvdt)
     st.write('The user entered ', fruit_choice)
 except URLError as e:
   st.error()
 
 # connect to streamlit n retrieve the info imbued in the file
 
-conn = snowflake.connector.connect(**st.secrets["snowflake"])
-cur = conn.cursor()
-cur.execute("SELECT * from pc_rivery_db.public.fruit_load_list;")
-dr = cur.fetchall()
 
 st.header("The fruit load list contains:")
-st.dataframe(dr)
+
+# snowflake functions
+def get_f_list():
+  with conn.cursor() as cr:
+    cr.execute("SELECT * from pc_rivery_db.public.fruit_load_list;")
+    return cr.fetchall()
+
+if st.button("Get Fruit Load List"):
+  conn = snowflake.connector.connect(**st.secrets["snowflake"])
+  dr = get_f_list()
+  st.dataframe(dr)
 
 # allow insertion of data 
+
+def insert_row(new_fruit):
+  with conn.cursor() as cur:
+    cur.execute("insert into PC_RIVERY_DB.PUBLIC.FRUIT_LOAD_LIST values('"+ new_fruit +"');")
+    return "Thanks for adding" + new_fruit
+
 inp = st.text_input("What fruit would you like to add?","jackfruit")
-cur.execute("insert into PC_RIVERY_DB.PUBLIC.FRUIT_LOAD_LIST values('"+ inp +"');")
-st.write("INSERTED " + inp)
+if st.button("Add Fruit"):
+  conn = snowflake.connector.connect(**st.secrets["snowflake"])
+  t = insert_row(inp)
+  st.write(t)
