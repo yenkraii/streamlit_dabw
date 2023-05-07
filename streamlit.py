@@ -27,3 +27,11 @@ st.dataframe(df_filtered)
 st.text("need to save selection as a variable to be used to loc[] out the relevant rows")
 st.text("then display the filtered dataframe instead")
 
+#New section to utilise fruityvice api response
+
+import requests
+fruityvice_response = requests.get("https://fruityvice.com/api/fruit/watermelon")
+streamlit.text(fruityvice_response.json())
+# to retreive the json response
+streamlit.header("Fruityvice Fruit Advice!")
+
