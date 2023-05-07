@@ -58,3 +58,4 @@ st.dataframe(dr)
 # allow insertion of data 
 inp = st.text_input("What fruit would you like to add?","jackfruit")
 cur.execute("insert into PC_RIVERY_DB.PUBLIC.FRUIT_LOAD_LIST values('"+ inp +"');")
+st.write("INSERTED " + inp)
