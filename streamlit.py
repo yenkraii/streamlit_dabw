@@ -70,6 +70,7 @@ def get_f_list():
 if st.button("Get Fruit Load List"):
   conn = snowflake.connector.connect(**st.secrets["snowflake"])
   dr = get_f_list()
+  conn.close()
   st.dataframe(dr)
 
 # allow insertion of data 
@@ -83,4 +84,5 @@ inp = st.text_input("What fruit would you like to add?","jackfruit")
 if st.button("Add Fruit"):
   conn = snowflake.connector.connect(**st.secrets["snowflake"])
   t = insert_row(inp)
+  conn.close()
   st.write(t)
