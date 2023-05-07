@@ -1,5 +1,8 @@
 import streamlit as st
 import pandas as pd
+import requests
+import snowflake.connector
+from urllib.error import URLError
 
 st.title("Hello World!")
 
@@ -33,20 +36,22 @@ st.text("then display the filtered dataframe instead")
 # to retreive the json response
 st.header("Fruityvice Fruit Advice!")
 
-fruit_choice = st.text_input('What fruit would you like information about?','Kiwi')
-st.write('The user entered ', fruit_choice)
-
-
-import requests
-fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + fruit_choice)
-
-# standardise returned response to look prettier
-fruityvice_normalized = pd.json_normalize(fruityvice_response.json())
-# presenting it in a dataframe
-st.dataframe(fruityvice_normalized)
+try:
+  fruit_choice = st.text_input('What fruit would you like information about?','Kiwi')
+  if not fruit_choice:
+    st.error("Please select a fruit to get info")
+  else:
+    fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + fruit_choice)
+    # standardise returned response to look prettier
+    fruityvice_normalized = pd.json_normalize(fruityvice_response.json())
+    # presenting it in a dataframe
+    st.dataframe(fruityvice_normalized)
+    st.write('The user entered ', fruit_choice)
+except URLError as e:
+  st.error()
 
 # connect to streamlit n retrieve the info imbued in the file
-import snowflake.connector
+
 conn = snowflake.connector.connect(**st.secrets["snowflake"])
 cur = conn.cursor()
 cur.execute("SELECT * from pc_rivery_db.public.fruit_load_list;")
